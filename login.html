@@ -1,1 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン | PatternLock</title>
 
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <div class="logo">
+            🔒
+        </div>
+
+        <h1>ログイン</h1>
+
+        <p class="subtitle">
+            登録したパターンを入力してください
+        </p>
+
+        <div id="patternLock" class="pattern-lock">
+
+            <svg id="patternCanvas"></svg>
+
+            <div class="dot" data-id="1"></div>
+            <div class="dot" data-id="2"></div>
+            <div class="dot" data-id="3"></div>
+
+            <div class="dot" data-id="4"></div>
+            <div class="dot" data-id="5"></div>
+            <div class="dot" data-id="6"></div>
+
+            <div class="dot" data-id="7"></div>
+            <div class="dot" data-id="8"></div>
+            <div class="dot" data-id="9"></div>
+
+        </div>
+
+        <p id="message" class="message"></p>
+
+        <button id="loginButton" class="btn primary">
+            ログイン
+        </button>
+
+        <button id="resetButton" class="btn secondary">
+            リセット
+        </button>
+
+        <a href="index.html" class="back">
+            ← トップページへ戻る
+        </a>
+
+    </div>
+
+</div>
+
+<script src="js/pattern.js"></script>
+
+</body>
+</html>
