@@ -1,1 +1,61 @@
+:root{
+    --primary:#2563eb;
+    --primary-light:#dbeafe;
+    --primary-dark:#1d4ed8;
+    --background:#f5f9ff;
+    --card:#ffffff;
+    --text:#1f2937;
+    --subtext:#6b7280;
+    --error:#dc2626;
+    --border:#bfdbfe;
+}
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:var(--background);
+    font-family:"Segoe UI","Yu Gothic UI",sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.login-card{
+    width:100%;
+    max-width:480px;
+    background:var(--card);
+    border-radius:24px;
+    padding:40px;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+.logo{
+    font-size:54px;
+    text-align:center;
+}
+
+h1{
+    margin-top:15px;
+    text-align:center;
+    color:var(--primary);
+}
+
+.subtitle{
+    margin:10px 0 30px;
+    text-align:center;
+    color:var(--subtext);
+    line-height:1.6;
+}
