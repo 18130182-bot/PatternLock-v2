@@ -2,7 +2,6 @@ const dots = [...document.querySelectorAll(".dot")];
 const message = document.getElementById("message");
 const loginButton = document.getElementById("loginButton");
 const resetButton = document.getElementById("resetButton");
-
 const svg = document.getElementById("patternCanvas");
 
 let pattern = [];
@@ -10,7 +9,7 @@ let drawing = false;
 let currentLine = null;
 
 // --------------------
-// ドットの中心座標
+// ドット中心座標
 // --------------------
 function getCenter(dot) {
     const rect = dot.getBoundingClientRect();
@@ -23,10 +22,9 @@ function getCenter(dot) {
 }
 
 // --------------------
-// 線を描く
+// 固定線を描画
 // --------------------
 function drawLine(dot1, dot2) {
-
     const p1 = getCenter(dot1);
     const p2 = getCenter(dot2);
 
@@ -47,30 +45,11 @@ function drawLine(dot1, dot2) {
 }
 
 // --------------------
-// ドット選択
+// 仮線開始
 // --------------------
-function activateDot(dot) {
-
-    const id = Number(dot.dataset.id);
-
-    if (pattern.includes(id)) return;
-
-    if (pattern.length > 0) {
-
-        const prev = document.querySelector(
-            `.dot[data-id="${pattern[pattern.length - 1]}"]`
-        );
-
-        drawLine(prev, dot);
-        function updateCurrentLine(x, y) {
-
-    if (!currentLine || pattern.length === 0) return;
-
-    currentLine.setAttribute("x2", x);
-    currentLine.setAttribute("y2", y);
-}
-
 function startCurrentLine(dot) {
+
+    finishCurrentLine();
 
     const p = getCenter(dot);
 
@@ -90,20 +69,52 @@ function startCurrentLine(dot) {
     svg.appendChild(currentLine);
 }
 
+// --------------------
+// 仮線更新
+// --------------------
+function updateCurrentLine(x, y) {
+
+    if (!currentLine) return;
+
+    currentLine.setAttribute("x2", x);
+    currentLine.setAttribute("y2", y);
+}
+
+// --------------------
+// 仮線終了
+// --------------------
 function finishCurrentLine() {
 
     if (currentLine) {
         currentLine.remove();
         currentLine = null;
     }
-
 }
-        
+
+// --------------------
+// ドット選択
+// --------------------
+function activateDot(dot) {
+
+    const id = Number(dot.dataset.id);
+
+    if (pattern.includes(id)) return;
+
+    if (pattern.length > 0) {
+
+        const prev = document.querySelector(
+            `.dot[data-id="${pattern[pattern.length - 1]}"]`
+        );
+
+        finishCurrentLine();
+        drawLine(prev, dot);
     }
 
     pattern.push(id);
 
     dot.classList.add("active");
+
+    startCurrentLine(dot);
 }
 
 // --------------------
@@ -112,6 +123,10 @@ function finishCurrentLine() {
 function clearPattern() {
 
     pattern = [];
+
+    drawing = false;
+
+    finishCurrentLine();
 
     dots.forEach(dot => {
         dot.classList.remove("active");
@@ -123,13 +138,16 @@ function clearPattern() {
 }
 
 // --------------------
-// マウス操作
+// マウス開始
 // --------------------
 dots.forEach(dot => {
 
-    dot.addEventListener("mousedown", () => {
+    dot.addEventListener("mousedown", e => {
+
+        e.preventDefault();
 
         drawing = true;
+
         activateDot(dot);
 
     });
@@ -143,9 +161,10 @@ dots.forEach(dot => {
     });
 
 });
-
-document.addEventListener("mouseup", () =>　｛
-
+// --------------------
+// マウス移動
+// --------------------
+document.addEventListener("mousemove", e => {
 
     if (!drawing) return;
 
@@ -159,7 +178,20 @@ document.addEventListener("mouseup", () =>　｛
 });
 
 // --------------------
-// タッチ操作
+// マウス終了
+// --------------------
+document.addEventListener("mouseup", () => {
+
+    if (!drawing) return;
+
+    drawing = false;
+
+    finishCurrentLine();
+
+});
+
+// --------------------
+// タッチ開始
 // --------------------
 dots.forEach(dot => {
 
@@ -173,30 +205,50 @@ dots.forEach(dot => {
 
     });
 
-    dot.addEventListener("touchmove", e => {
-
-        e.preventDefault();
-
-        const touch = e.touches[0];
-
-        const element = document.elementFromPoint(
-            touch.clientX,
-            touch.clientY
-        );
-
-        if (element && element.classList.contains("dot")) {
-            activateDot(element);
-            finishCurrentLine();
-startCurrentLine(dot);
-        }
-
-    });
-
 });
 
+// --------------------
+// タッチ移動
+// --------------------
+document.addEventListener("touchmove", e => {
+
+    if (!drawing) return;
+
+    e.preventDefault();
+
+    const touch = e.touches[0];
+
+    const rect = svg.getBoundingClientRect();
+
+    updateCurrentLine(
+        touch.clientX - rect.left,
+        touch.clientY - rect.top
+    );
+
+    const element = document.elementFromPoint(
+        touch.clientX,
+        touch.clientY
+    );
+
+    if (
+        element &&
+        element.classList.contains("dot")
+    ) {
+        activateDot(element);
+    }
+
+}, { passive: false });
+
+// --------------------
+// タッチ終了
+// --------------------
 document.addEventListener("touchend", () => {
 
+    if (!drawing) return;
+
     drawing = false;
+
+    finishCurrentLine();
 
 });
 
@@ -209,12 +261,17 @@ loginButton.addEventListener("click", () => {
 
         message.style.color = "#dc2626";
         message.textContent = "4点以上選択してください";
-
         return;
     }
 
     message.style.color = "#16a34a";
-    message.textContent = "入力パターン: " + pattern.join("-");
+    message.textContent =
+        "入力パターン: " + pattern.join("-");
+
+    // auth.js と連携する場合は、
+    // ここで pattern を渡して認証処理を呼び出します。
+    // 例:
+    // loginWithPattern(pattern);
 
 });
 
