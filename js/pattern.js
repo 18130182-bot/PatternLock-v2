@@ -264,9 +264,9 @@ loginButton.addEventListener("click", () => {
         return;
     }
 
-    message.style.color = "#16a34a";
-    message.textContent =
-        "入力パターン: " + pattern.join("-");
+      authenticate(pattern);
+
+});
 
     // auth.js と連携する場合は、
     // ここで pattern を渡して認証処理を呼び出します。
