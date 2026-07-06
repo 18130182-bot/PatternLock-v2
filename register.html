@@ -1,87 +1,82 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>新規登録 | PatternLock</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新規登録 | PatternLock</title>
 
-<link rel="stylesheet" href="css/login.css">
-
+  <link rel="stylesheet" href="css/login.css">
 </head>
+<body>
 
-<script src="js/pattern.js"></script>
-<script src="js/auth.js"></script>>
+  <div class="login-container">
 
-<div class="login-container">
+    <div class="login-card">
 
-<div class="login-card">
+      <div class="logo">🔒</div>
 
-<div class="logo">🔒</div>
+      <h1>新規登録</h1>
 
-<h1>新規登録</h1>
+      <p class="subtitle">
+        ユーザー情報を入力してください
+      </p>
 
-<p class="subtitle">
-ユーザー情報を入力してください
-</p>
+      <form id="registerForm">
 
-<form id="registerForm">
+        <input
+          id="username"
+          type="text"
+          placeholder="ユーザー名"
+          required>
 
-<input
-id="username"
-type="text"
-placeholder="ユーザー名"
-required>
+        <input
+          id="email"
+          type="email"
+          placeholder="メールアドレス"
+          required>
 
-<input
-id="email"
-type="email"
-placeholder="メールアドレス"
-required>
+        <div id="patternLock" class="pattern-lock">
 
-<div id="patternLock" class="pattern-lock">
+          <svg id="patternCanvas"></svg>
 
-<svg id="patternCanvas"></svg>
+          <div class="dot" data-id="1"></div>
+          <div class="dot" data-id="2"></div>
+          <div class="dot" data-id="3"></div>
 
-<div class="dot" data-id="1"></div>
-<div class="dot" data-id="2"></div>
-<div class="dot" data-id="3"></div>
+          <div class="dot" data-id="4"></div>
+          <div class="dot" data-id="5"></div>
+          <div class="dot" data-id="6"></div>
 
-<div class="dot" data-id="4"></div>
-<div class="dot" data-id="5"></div>
-<div class="dot" data-id="6"></div>
+          <div class="dot" data-id="7"></div>
+          <div class="dot" data-id="8"></div>
+          <div class="dot" data-id="9"></div>
 
-<div class="dot" data-id="7"></div>
-<div class="dot" data-id="8"></div>
-<div class="dot" data-id="9"></div>
+        </div>
 
-</div>
+        <p id="message" class="message"></p>
 
-<p id="message" class="message"></p>
+        <button
+          type="submit"
+          class="btn primary">
+          登録する
+        </button>
 
-<button
-type="submit"
-class="btn primary">
+        <a
+          href="index.html"
+          class="back">
+          ← 戻る
+        </a>
 
-登録する
+      </form>
 
-</button>
+    </div>
 
-<a
-href="index.html"
-class="back">
+  </div>
 
-← 戻る
-
-</a>
-
-</form>
-
-</div>
-
-</div>
-
-<script src="js/pattern.js"></script>
-<script src="js/auth.js"></script>
+  <script src="js/pattern.js"></script>
+  <script src="js/auth.js"></script>
 
 </body>
 </html>
+```
