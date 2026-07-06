@@ -3,6 +3,9 @@ const message = document.getElementById("message");
 const loginButton = document.getElementById("loginButton");
 const resetButton = document.getElementById("resetButton");
 
+const svg = document.getElementById("patternCanvas");
+const patternLock = document.getElementById("patternLock");
+let lines = [];
 let pattern = [];
 let drawing = false;
 
