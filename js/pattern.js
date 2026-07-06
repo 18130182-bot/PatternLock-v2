@@ -7,6 +7,7 @@ const svg = document.getElementById("patternCanvas");
 
 let pattern = [];
 let drawing = false;
+let currentLine = null;
 
 // --------------------
 // ドットの中心座標
@@ -61,6 +62,43 @@ function activateDot(dot) {
         );
 
         drawLine(prev, dot);
+        function updateCurrentLine(x, y) {
+
+    if (!currentLine || pattern.length === 0) return;
+
+    currentLine.setAttribute("x2", x);
+    currentLine.setAttribute("y2", y);
+}
+
+function startCurrentLine(dot) {
+
+    const p = getCenter(dot);
+
+    currentLine = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line"
+    );
+
+    currentLine.setAttribute("x1", p.x);
+    currentLine.setAttribute("y1", p.y);
+    currentLine.setAttribute("x2", p.x);
+    currentLine.setAttribute("y2", p.y);
+    currentLine.setAttribute("stroke", "#60a5fa");
+    currentLine.setAttribute("stroke-width", "4");
+    currentLine.setAttribute("stroke-linecap", "round");
+
+    svg.appendChild(currentLine);
+}
+
+function finishCurrentLine() {
+
+    if (currentLine) {
+        currentLine.remove();
+        currentLine = null;
+    }
+
+}
+        
     }
 
     pattern.push(id);
@@ -106,9 +144,17 @@ dots.forEach(dot => {
 
 });
 
-document.addEventListener("mouseup", () => {
+document.addEventListener("mouseup", () =>　｛
 
-    drawing = false;
+
+    if (!drawing) return;
+
+    const rect = svg.getBoundingClientRect();
+
+    updateCurrentLine(
+        e.clientX - rect.left,
+        e.clientY - rect.top
+    );
 
 });
 
@@ -140,6 +186,8 @@ dots.forEach(dot => {
 
         if (element && element.classList.contains("dot")) {
             activateDot(element);
+            finishCurrentLine();
+startCurrentLine(dot);
         }
 
     });
