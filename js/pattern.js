@@ -4,42 +4,122 @@ const loginButton = document.getElementById("loginButton");
 const resetButton = document.getElementById("resetButton");
 
 const svg = document.getElementById("patternCanvas");
-const patternLock = document.getElementById("patternLock");
-let lines = [];
+
 let pattern = [];
 let drawing = false;
 
-function activateDot(dot){
+// --------------------
+// ドットの中心座標
+// --------------------
+function getCenter(dot) {
+    const rect = dot.getBoundingClientRect();
+    const svgRect = svg.getBoundingClientRect();
+
+    return {
+        x: rect.left + rect.width / 2 - svgRect.left,
+        y: rect.top + rect.height / 2 - svgRect.top
+    };
+}
+
+// --------------------
+// 線を描く
+// --------------------
+function drawLine(dot1, dot2) {
+
+    const p1 = getCenter(dot1);
+    const p2 = getCenter(dot2);
+
+    const line = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line"
+    );
+
+    line.setAttribute("x1", p1.x);
+    line.setAttribute("y1", p1.y);
+    line.setAttribute("x2", p2.x);
+    line.setAttribute("y2", p2.y);
+    line.setAttribute("stroke", "#2563eb");
+    line.setAttribute("stroke-width", "6");
+    line.setAttribute("stroke-linecap", "round");
+
+    svg.appendChild(line);
+}
+
+// --------------------
+// ドット選択
+// --------------------
+function activateDot(dot) {
 
     const id = Number(dot.dataset.id);
 
-    if(pattern.includes(id)){
-        return;
+    if (pattern.includes(id)) return;
+
+    if (pattern.length > 0) {
+
+        const prev = document.querySelector(
+            `.dot[data-id="${pattern[pattern.length - 1]}"]`
+        );
+
+        drawLine(prev, dot);
     }
 
     pattern.push(id);
 
     dot.classList.add("active");
-
 }
 
-function clearPattern(){
+// --------------------
+// リセット
+// --------------------
+function clearPattern() {
 
     pattern = [];
 
-    dots.forEach(dot=>{
-
+    dots.forEach(dot => {
         dot.classList.remove("active");
+    });
+
+    svg.innerHTML = "";
+
+    message.textContent = "";
+}
+
+// --------------------
+// マウス操作
+// --------------------
+dots.forEach(dot => {
+
+    dot.addEventListener("mousedown", () => {
+
+        drawing = true;
+        activateDot(dot);
 
     });
 
-    message.textContent = "";
+    dot.addEventListener("mouseenter", () => {
 
-}
+        if (drawing) {
+            activateDot(dot);
+        }
 
-dots.forEach(dot=>{
+    });
 
-    dot.addEventListener("mousedown",()=>{
+});
+
+document.addEventListener("mouseup", () => {
+
+    drawing = false;
+
+});
+
+// --------------------
+// タッチ操作
+// --------------------
+dots.forEach(dot => {
+
+    dot.addEventListener("touchstart", e => {
+
+        e.preventDefault();
 
         drawing = true;
 
@@ -47,37 +127,50 @@ dots.forEach(dot=>{
 
     });
 
-    dot.addEventListener("mouseenter",()=>{
+    dot.addEventListener("touchmove", e => {
 
-        if(drawing){
+        e.preventDefault();
 
-            activateDot(dot);
+        const touch = e.touches[0];
 
+        const element = document.elementFromPoint(
+            touch.clientX,
+            touch.clientY
+        );
+
+        if (element && element.classList.contains("dot")) {
+            activateDot(element);
         }
 
     });
 
 });
 
-document.addEventListener("mouseup",()=>{
+document.addEventListener("touchend", () => {
 
     drawing = false;
 
 });
 
-loginButton.addEventListener("click",()=>{
+// --------------------
+// ログイン
+// --------------------
+loginButton.addEventListener("click", () => {
 
-    if(pattern.length<4){
+    if (pattern.length < 4) {
 
-        message.textContent="4点以上選択してください";
+        message.style.color = "#dc2626";
+        message.textContent = "4点以上選択してください";
 
         return;
-
     }
 
-    message.style.color="#16a34a";
-    message.textContent="入力パターン: "+pattern.join("-");
+    message.style.color = "#16a34a";
+    message.textContent = "入力パターン: " + pattern.join("-");
 
 });
 
-resetButton.addEventListener("click",clearPattern);
+// --------------------
+// リセット
+// --------------------
+resetButton.addEventListener("click", clearPattern);
