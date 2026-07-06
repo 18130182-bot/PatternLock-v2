@@ -1,1 +1,24 @@
+.pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 70px);
+  gap: 20px;
+  justify-content: center;
+  margin: 30px 0;
+}
 
+.pattern-dot {
+  width: 70px;
+  height: 70px;
+  border: 3px solid #4f8cff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pattern-dot:hover {
+  transform: scale(1.1);
+}
+
+.pattern-dot.active {
+  background-color: #4f8cff;
+}
