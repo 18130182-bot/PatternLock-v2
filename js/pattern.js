@@ -268,12 +268,7 @@ loginButton.addEventListener("click", () => {
 
 });
 
-    // auth.js と連携する場合は、
-    // ここで pattern を渡して認証処理を呼び出します。
-    // 例:
-    // loginWithPattern(pattern);
 
-});
 
 // --------------------
 // リセット
